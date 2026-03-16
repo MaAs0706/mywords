@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Words I Kept for You — Aswanth Madhav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d6;
+    --ink: #1a1612;
+    --ink-soft: #3d342a;
+    --ink-muted: #7a6e63;
+    --ink-faint: #b5aba0;
+    --rust: #8b4a2f;
+    --rust-light: #c4795a;
+    --gold: #9a7c4a;
+    --gold-light: #c4a96e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* Navigation */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 1.25rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--cream) 60%, transparent);
+  }
+
+  .nav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--rust); }
+
+  /* Cover / Hero */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-ornament {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    border: 0.5px solid var(--ink-faint);
+    opacity: 0.3;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  .cover-ornament:nth-child(2) {
+    width: 400px;
+    height: 400px;
+    animation-delay: -2s;
+    opacity: 0.2;
+  }
+
+  .cover-ornament:nth-child(3) {
+    width: 200px;
+    height: 200px;
+    animation-delay: -4s;
+    opacity: 0.15;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.15; }
+  }
+
+  .cover-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+
+  .cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.05;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.6s;
+  }
+
+  .cover-rule {
+    width: 60px;
+    height: 0.5px;
+    background: var(--gold);
+    margin: 1.5rem auto;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.9s;
+  }
+
+  .cover-author {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.1s;
+  }
+
+  .cover-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.5s;
+  }
+
+  .cover-scroll span {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .scroll-line {
+    width: 0.5px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--ink-faint), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.7); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Table of Contents */
+  .toc-section {
+    padding: 6rem 3rem;
+    max-width: 700px;
+    margin: 0 auto;
+    border-top: 0.5px solid var(--cream-dark);
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3rem;
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.5px solid var(--cream-dark);
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .toc-item:hover .toc-item-title { color: var(--rust); }
+  .toc-item:hover .toc-item-num { color: var(--rust-light); }
+
+  .toc-item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faint);
+    transition: color 0.3s;
+  }
+
+  .toc-item-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    font-weight: 300;
+    transition: color 0.3s;
+  }
+
+  .toc-item-type {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* Main content */
+  .content {
+    padding: 0 3rem 8rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Piece */
+  .piece {
+    padding: 5rem 0;
+    border-bottom: 0.5px solid var(--cream-dark);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .piece.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .piece-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .piece-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--cream-dark);
+    line-height: 1;
+    min-width: 48px;
+  }
+
+  .piece-meta { flex: 1; }
+
+  .piece-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+  }
+
+  .piece-type {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .piece-body {
+    font-size: 19px;
+    line-height: 2;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+    font-weight: 400;
+  }
+
+  .piece-body.prose {
+    white-space: normal;
+    font-size: 18px;
+    line-height: 1.9;
+  }
+
+  .piece-body.prose p {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Decorative drop cap for prose */
+  .piece-body.prose p:first-child::first-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4.5em;
+    font-weight: 300;
+    font-style: italic;
+    float: left;
+    line-height: 0.75;
+    margin-right: 0.1em;
+    margin-top: 0.1em;
+    color: var(--rust);
+  }
+
+  /* Pull quote style for short pieces */
+  .piece-body.epigram {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+    border-left: 2px solid var(--rust-light);
+    padding-left: 2rem;
+    white-space: pre-wrap;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 0.5px solid var(--cream-dark);
+  }
+
+  .footer-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* Back to top */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border: 0.5px solid var(--ink-faint);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+    font-size: 16px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    z-index: 40;
+  }
+
+  .back-top.visible { opacity: 1; }
+  .back-top:hover { border-color: var(--rust); color: var(--rust); }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .toc-section, .content { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .cover-title { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-title">Words I Kept for You</span>
+  <ul class="nav-links">
+    <li><a href="#toc">Contents</a></li>
+    <li><a href="#p1">Begin</a></li>
+  </ul>
+</nav>
+
+<!-- Cover -->
+<section class="cover">
+  <div class="cover-ornament"></div>
+  <div class="cover-ornament"></div>
+  <div class="cover-ornament"></div>
+  <p class="cover-eyebrow">A Personal Collection</p>
+  <h1 class="cover-title">Words I Kept<br>for You</h1>
+  <div class="cover-rule"></div>
+  <p class="cover-author">Aswanth Madhav</p>
+  <div class="cover-scroll">
+    <span>Read</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Table of Contents -->
+<section class="toc-section" id="toc">
+  <p class="section-label">Contents</p>
+  <ul class="toc-list">
+    <li><a class="toc-item" href="#p1"><span class="toc-item-num">i</span><span class="toc-item-title">Why do I love the rain?</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p2"><span class="toc-item-num">ii</span><span class="toc-item-title">I don't know how to tell you</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p3"><span class="toc-item-num">iii</span><span class="toc-item-title">I keep things to tell you</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p4"><span class="toc-item-num">iv</span><span class="toc-item-title">She was afraid of the dark</span><span class="toc-item-type">verse</span></a></li>
+    <li><a class="toc-item" href="#p5"><span class="toc-item-num">v</span><span class="toc-item-title">Words I kept for you</span><span class="toc-item-type">prose</span></a></li>
+    <li><a class="toc-item" href="#p6"><span class="toc-item-num">vi</span><span class="toc-item-title">Parallel lines</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p7"><span class="toc-item-num">vii</span><span class="toc-item-title">Why gift flowers</span><span class="toc-item-type">prose poem</span></a></li>
+    <li><a class="toc-item" href="#p8"><span class="toc-item-num">viii</span><span class="toc-item-title">The Starry Night</span><span class="toc-item-type">prose</span></a></li>
+    <li><a class="toc-item" href="#p9"><span class="toc-item-num">ix</span><span class="toc-item-title">She wasn't the kind of girl</span><span class="toc-item-type">prose</span></a></li>
+    <li><a class="toc-item" href="#p10"><span class="toc-item-num">x</span><span class="toc-item-title">How much do you love me?</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p11"><span class="toc-item-num">xi</span><span class="toc-item-title">I started writing</span><span class="toc-item-type">poem</span></a></li>
+    <li><a class="toc-item" href="#p12"><span class="toc-item-num">xii</span><span class="toc-item-title">Maybe it was not love at first sight</span><span class="toc-item-type">poem</span></a></li>
+  </ul>
+</section>
+
+<!-- Pieces -->
+<main class="content">
+
+  <article class="piece" id="p1">
+    <div class="piece-header">
+      <span class="piece-num">i</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">Why do I love the rain?</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">Maybe because the rain doesn't judge.
+It doesn't ask me why I'm crying, it doesn't tell me to stop.
+It just falls quietly, and when my tears slip down,
+the rain takes them in, makes them its own,
+until no one — not even I — can tell them apart.
+
+The rain knows more than I do.
+This time the words didn't escape my lips,
+they escaped as tears,
+and disappeared into the downpour
+before I could understand them.
+Maybe it's better I don't know what they meant.
+Maybe not.
+
+I watched my tears fall,
+and wondered if the rain itself
+was someone else's grief.
+What anguish must it take
+to drown the whole earth?
+I wondered what he felt…
+and for a moment,
+his sorrow carried mine away.</div>
+  </article>
+
+  <article class="piece" id="p2">
+    <div class="piece-header">
+      <span class="piece-num">ii</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">I don't know how to tell you how much I love you</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">I don't know how to tell you how much I love you.
+Not because I have no words —
+but because words will always fall short.
+
+Still, I'll try.
+
+I love you — not in the loud, movie kind of way.
+But in the quiet way my eyes find you first,
+in every room, in every crowd.
+In the way your name feels like home in my mouth.
+In the separate gallery in my phone,
+worth more than the Kohinoor itself.
+
+It's in the way I remember the little things
+you forgot you even said.
+In the way I can hear your smile,
+and also hear when you're hiding tears behind "I'm fine."
+
+I love you in moments you'll never notice —
+when I choose to listen instead of speak,
+when I'd trade a thousand sunrises
+just to watch you laugh once more.
+When even the peacocks would stop to watch,
+because next to you, their beauty feels small.
+
+It's not grand gestures or perfect timing.
+It's not fireworks or fate.
+It's quieter.
+It's truer.
+It's mine to give, and yours to keep.
+
+And it's more than love —
+it's belonging.
+It's wanting to stay when the days turn dark,
+to be your shelter when the world feels heavy.
+It's knowing that in every version of my life,
+I'd still choose you —
+even in the ones where I lose everything else.
+
+So no,
+I don't know how to tell you how much I love you.
+I only know how to live it.</div>
+  </article>
+
+  <article class="piece" id="p3">
+    <div class="piece-header">
+      <span class="piece-num">iii</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">I keep things to tell you</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">I keep things to tell you.
+Not because they're important —
+most of them aren't —
+but because they'd feel incomplete if you didn't hear them.
+
+Somehow, my day feels wrong
+if I haven't seen your name pop up,
+if I haven't heard you laugh.
+
+I notice when you're quieter than usual.
+When you say you're fine,
+but your voice says something else.
+
+And even when you're not here,
+you're everywhere —
+in the songs I skip halfway through because they remind me too much,
+in the places I look for you without realizing.
+
+I'd choose sitting beside you in silence
+over any crowded room.
+
+It's not something I say out loud.
+It's just there —
+in the way I stay,
+in the way I listen,
+in the way I show up.
+
+You'd know it if you looked close enough.</div>
+  </article>
+
+  <article class="piece" id="p4">
+    <div class="piece-header">
+      <span class="piece-num">iv</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">She was afraid of the dark</h2>
+        <span class="piece-type">verse</span>
+      </div>
+    </div>
+    <div class="piece-body epigram">She was afraid of the dark, so I burned myself to become her light.
+She said she loved flowers, so from my ashes, I let them bloom.
+Like a phoenix, I rose again — only to feel her hand in mine once more.</div>
+  </article>
+
+  <article class="piece" id="p5">
+    <div class="piece-header">
+      <span class="piece-num">v</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">Words I kept for you</h2>
+        <span class="piece-type">prose</span>
+      </div>
+    </div>
+    <div class="piece-body prose">
+      <p>I know I love writing about you. Even though I've lost you, I still hope I can weave you back with the thread of my words — this time, just to be mine. A place where distance doesn't exist, and neither do the problems that broke us.</p>
+      <p>But every time I write about you, I feel guilty. Someone as pure and magical as you cannot be contained in words. To describe you feels like a crime, as if language will always fail you.</p>
+      <p>And yet, if it is a crime, then let me be guilty. Let me go to jail, or even to hell — if it means that, in some small way, I could still keep a piece of you with me.</p>
+    </div>
+  </article>
+
+  <article class="piece" id="p6">
+    <div class="piece-header">
+      <span class="piece-num">vi</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">Parallel lines</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">We've always been told that parallel lines never meet.
+But shift your perspective, and you'll see them —
+going on together, side by side, until infinity.
+
+Secants, on the other hand, cross once
+only to part ways forever.
+
+If you ask me, I'd rather be the parallel lines.
+Even if I can't have you,
+I'd still choose to walk with you
+all the way to the end of life.
+Because what greater hell could there be
+than to hold you once,
+only to never hold you again?</div>
+  </article>
+
+  <article class="piece" id="p7">
+    <div class="piece-header">
+      <span class="piece-num">vii</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">Why gift flowers</h2>
+        <span class="piece-type">prose poem</span>
+      </div>
+    </div>
+    <div class="piece-body prose">
+      <p>Someone once asked me, "Why gift flowers when they'll wither and die?" At first, I agreed — what sense does it make to treasure something so fleeting?</p>
+      <p>But then it struck me. We don't run away from people just because they won't live forever. We love them, we hold them, we live alongside them as best as we can.</p>
+      <p>Because life was never about permanence — it was always about presence. To see beauty, to feel love, to cherish it while it lasts.</p>
+      <p>Only then do you truly touch the magic of living.</p>
+    </div>
+  </article>
+
+  <article class="piece" id="p8">
+    <div class="piece-header">
+      <span class="piece-num">viii</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">The Starry Night</h2>
+        <span class="piece-type">prose</span>
+      </div>
+    </div>
+    <div class="piece-body prose">
+      <p>I used to believe The Starry Night was the most beautiful painting in existence. Nothing, I thought, could ever rival it. Then I saw you.</p>
+      <p>It felt as though the gods themselves had painted you with quiet care — each stroke patient, deliberate, so that you could be exactly as you are. Your smile carries a warmth that could stir even the stillest heart to life again. Your hair moves with the ease of waterfalls, soft and effortless. And your heart… it shines with a purity that makes even the diamond seem ordinary.</p>
+      <p>To me, you are not just beautiful — you are living proof that sometimes the most breathtaking masterpiece is not on a canvas, but standing before us.</p>
+    </div>
+  </article>
+
+  <article class="piece" id="p9">
+    <div class="piece-header">
+      <span class="piece-num">ix</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">She wasn't the kind of girl</h2>
+        <span class="piece-type">prose</span>
+      </div>
+    </div>
+    <div class="piece-body prose">
+      <p>She wasn't the kind of girl who turned every head when she walked into a room. Her beauty wasn't loud like that.</p>
+      <p>It was quieter, softer — the kind you only noticed when you really looked. Like when you see a butterfly resting on a flower. You don't call it stunning or glamorous. You just pause, smile, and think, how pretty. And for some reason, your heart feels lighter, like the world remembered to be kind for a second.</p>
+      <p>That's what she was like. She didn't need the perfect dress or a thousand eyes on her. She could be in the simplest clothes, hair falling loose across her cheek in that stubborn tangle she never bothered to fix — and somehow it made her more beautiful, not less. Like the imperfection itself was part of the design.</p>
+      <p>Her smile… God, her smile. It wasn't perfect, but it was real. It had this warmth that stayed even after she stopped smiling, the kind that made you wait for it to return, like a song you didn't want to end. And when she laughed, really laughed, it reached her eyes in a way that made you forget what you were about to say.</p>
+      <p>She was smart — sharper than most people I'd ever met. But then there were moments when she'd do something so absent-minded, so ridiculously lacking in common sense, that you couldn't help but laugh. And instead of making her look less, it made her feel closer. Like even brilliance had its cracks.</p>
+      <p>But what stayed with you wasn't just how she looked or how clever she was. It was how she made you feel. Being around her was like being near a quiet fire on a cold night. You didn't even realize how much you were leaning into the warmth until you were already there. Hours slipped by without you noticing when you talked to her. And sometimes, you didn't even need to talk. You could just sit, watching her, and it still felt like you hadn't wasted a second.</p>
+      <p>She wasn't flawless. She wasn't meant to be. But she didn't have to try — she just was. And even as she was, she was already more than enough.</p>
+    </div>
+  </article>
+
+  <article class="piece" id="p10">
+    <div class="piece-header">
+      <span class="piece-num">x</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">How much do you love me?</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">"How much do you love me?" she asked.
+Not like a test — more like a whisper that didn't want an answer.
+
+I could've said a thousand things.
+Could've told her about how her smile messes with my heartbeat,
+or how silence feels softer when she's near.
+But I just looked at her — really looked —
+and said,
+"Try stabbing me… you'll see blood with your name written all over it."
+
+She laughed, called me dramatic.
+But I wasn't.
+Because love — real love — is not about flowers or perfect words.
+It's about the madness that hides behind calm eyes,
+the kind that makes you want to protect someone
+even when they're the one who hurt you.
+
+Maybe I don't love her like poets write about love.
+But I love her the way fire loves air —
+it can't exist without it.</div>
+  </article>
+
+  <article class="piece" id="p11">
+    <div class="piece-header">
+      <span class="piece-num">xi</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">I started writing</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">I started writing because there was a story
+I had already imagined with her.
+Every chapter was clear in my head —
+the laughter, the silences, the growing old together.
+
+But the story was left unfinished.
+Not because it was weak,
+but because it was too good to rush.
+The world paused,
+imagining what it would feel like
+if such a story were its own.
+
+And in that imagining,
+it forgot to turn the page.
+
+So now I write,
+hoping the world will remember
+to finish the story
+my heart had already begun.</div>
+  </article>
+
+  <article class="piece" id="p12">
+    <div class="piece-header">
+      <span class="piece-num">xii</span>
+      <div class="piece-meta">
+        <h2 class="piece-title">Maybe it was not love at first sight</h2>
+        <span class="piece-type">poem</span>
+      </div>
+    </div>
+    <div class="piece-body">Maybe it was not love at first sight.
+Maybe it was never meant to be.
+
+Maybe I was only meant
+to understand you
+the way a painter studies his art,
+the way Mozart understands his music.
+
+Maybe God planned the unveiling slowly,
+not all at once,
+so I could witness the beauty He created —
+a beauty not seen in a single glance,
+nor understood in a thousand years,
+a beauty that deepens
+every time it is looked at.</div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="footer-ornament">❧</div>
+  <p class="footer-text">Aswanth Madhav &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<a class="back-top" href="#" id="backTop" title="Back to top">↑</a>
+
+<script>
+  // Scroll reveal
+  const pieces = document.querySelectorAll('.piece');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  pieces.forEach(p => observer.observe(p));
+
+  // Back to top visibility
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('visible', window.scrollY > 600);
+  });
+</script>
+
+</body>
+</html>
